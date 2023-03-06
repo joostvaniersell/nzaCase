@@ -26,7 +26,17 @@ flights_info <- flights_info %>% mutate(flights_info,date=as.Date(paste('2013',m
 flights_info$date <-  as.Date(parse_date_time(flights_info$date, "%y/%m/%d"))
 
 
-
+flight_info_2 <-
+  flights_info %>%
+  group_by(dest) %>%
+  summarise(total_count=n(),
+            seats= sum(seats)) %>%
+  ungroup %>%
+  merge(y=airports, 
+        by.x='dest', 
+        by.y="faa",
+        all.x=TRUE) %>%
+  na.omit()
 
 
 
@@ -36,14 +46,37 @@ flights_info$date <-  as.Date(parse_date_time(flights_info$date, "%y/%m/%d"))
 function(input, output) {
   
   ###############################################
-  #add a leaflet map for output
+  #add a leaflet map for output 
   output$map <- renderLeaflet({
-    leaflet() %>%
+    
+      
+    leaflet(flight_info_2) %>%
       addTiles() %>%
-      setView(lng = -90.85, lat = 37.45, zoom = 3) %>%
-      addCircleMarkers(lng= airports_df$lon, lat=airports_df$lat, radius= 1, label=airports_df$name)
+      setView(lng = -90.85, lat = 37.45, zoom = 4) %>%
+      addCircleMarkers(lng= ~lon, lat=~lat, radius= ~total_count/1000, label=~name, layerId=~name)
   })  
   
+
+  
+  # Show a popup at the given location
+
+  showPopup <- function(name, lat, lng) {
+    selectedairport <- flight_info_2[flight_info_2$name == name,]
+    content <- selectedairport$name
+    leafletProxy("map") %>% addPopups(lng, lat, content, layerId = name)
+  }
+
+  # When map is clicked, show a popup with city info
+  observe({
+    leafletProxy("map") %>% clearPopups()
+    event <- input$map_marker_click
+    if (is.null(event))
+      return()
+    
+    isolate({
+      showPopup(event$id, event$lat, event$lng)
+    })
+  })
 
   
   ###############################################

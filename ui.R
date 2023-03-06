@@ -13,7 +13,7 @@ fluidPage(
            #create the first panel: the Map
            tabPanel("Map",
                     
-                    leafletOutput(outputId = 'map', #width="100%", height="100%"
+                    leafletOutput(outputId = 'map', width="1000", height="1000"
                                   )
           ),
           
@@ -30,8 +30,8 @@ fluidPage(
                                    selected = c("JFK", "EWR" , "LGA")
                                    ),
                 
-                #range for tiem period
-                dateRangeInput(inputId= "daterange", "During which time period:",
+                #range for time period
+                dateRangeInput(inputId= "daterange", h3("During which time period:"),
                                start = "2013-01-01",
                                end   = "2013-12-31")
                 ),
