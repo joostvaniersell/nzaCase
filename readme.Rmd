@@ -1,0 +1,19 @@
+---
+title: "readme"
+author: "Joost van Iersel"
+date: "3/6/2023"
+output: html_document
+---
+
+
+Main inspiration: 
+
+Superzip example:
+https://github.com/rstudio/shiny-examples/tree/main/063-superzip-example
+
+Bloodbank :
+https://shiny.rstudio.com/gallery/india-blood-banks.html
+https://github.com/atmajitg/bloodbanks
+
+Other stuff:
+https://shiny.rstudio.com/articles/datatables.html

@@ -14,7 +14,22 @@ navbarPage("NYC Flights", id="nav",
                                   )
           ),
           
+          #create second tab: data explorer
+          tabPanel("Data explorer"),
           
-          tabPanel("Data explorer")
+          #create third tab: raw data explorer
+          tabPanel("Raw Data explorer",
+            tabsetPanel(
+              tabPanel("Flights", DT::dataTableOutput("flights")),
+              tabPanel("Airlines", DT::dataTableOutput("airlines")),
+              tabPanel("Airports", DT::dataTableOutput("airports")),
+              tabPanel("Planes", DT::dataTableOutput("planes")),
+              tabPanel("Weather", DT::dataTableOutput("weather"))
+            )
+          ),
+          
+          tabPanel("Read Me",
+                   includeMarkdown("readme.Rmd"))
+            
            
 )
