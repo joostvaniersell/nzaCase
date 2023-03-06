@@ -21,4 +21,8 @@ https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization
 
 
 TODO:
-- keep colors consistent
+- Delay
+- Info in popups
+- keep colors consistent in data tab
+- lines to popular destinations
+- Add delay per city

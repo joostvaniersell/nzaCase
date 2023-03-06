@@ -19,7 +19,7 @@ flights_info <- flights_df %>% full_join(planes, "tailnum")  #Joint de plane inf
 
 flights_info <- 
   flights_info %>% 
-  mutate(seats = replace_na(seats,mean(seats, na.rm = TRUE))) #replace missings
+  mutate(seats = replace_na(seats, round(mean(seats, na.rm = TRUE), digits=0))) #replace missings
 
 flights_info <- flights_info %>% mutate(flights_info,date=as.Date(paste('2013',month,day,sep="/")))
 
@@ -36,7 +36,7 @@ flight_info_2 <-
         by.x='dest', 
         by.y="faa",
         all.x=TRUE) %>%
-  na.omit()
+        na.omit()
 
 
 
@@ -45,24 +45,63 @@ flight_info_2 <-
 
 function(input, output) {
   
-  ###############################################
+  #######################################################################################
+  #######################################################################################
+  ##CREATE MAP
   #add a leaflet map for output 
+  
+  flight_reactive_map <- reactive({
+    filter(flights_info, date >= input$daterange_map[1] & date <= input$daterange_map[2], origin %in% input$airportChoice_map)
+  })
+
+  
   output$map <- renderLeaflet({
+    
+    
+    flight_info_2 <-
+      flight_reactive_map() %>%
+      group_by(dest) %>%
+      summarise(total_count=n(),
+                seats= sum(seats)) %>%
+      ungroup %>%
+      merge(y=airports, 
+            by.x='dest', 
+            by.y="faa",
+            all.x=TRUE) %>%
+      na.omit()
+    
     
       
     leaflet(flight_info_2) %>%
       addTiles() %>%
       setView(lng = -90.85, lat = 37.45, zoom = 4) %>%
-      addCircleMarkers(lng= ~lon, lat=~lat, radius= ~total_count/1000, label=~name, layerId=~name)
+      addCircleMarkers(lng= ~lon, lat=~lat, radius= ~total_count/500, label=~name, layerId=~name)
   })  
   
 
   
   # Show a popup at the given location
-
+  
+  
+  
   showPopup <- function(name, lat, lng) {
+    flight_info_2 <-
+      flight_reactive_map() %>%
+      group_by(dest) %>%
+      summarise(total_count=n(),
+                seats= sum(seats)) %>%
+      ungroup %>%
+      merge(y=airports, 
+            by.x='dest', 
+            by.y="faa",
+            all.x=TRUE) %>%
+      na.omit()
+    
     selectedairport <- flight_info_2[flight_info_2$name == name,]
-    content <- selectedairport$name
+    content <- as.character(tagList(
+      tags$h3(selectedairport$name),
+      tags$h5("Number of flights arriving per selected time period:", selectedairport$total_count),
+      tags$h5("Number of travelers arriving per selected time period:", selectedairport$seats)))
     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = name)
   }
 
@@ -79,7 +118,8 @@ function(input, output) {
   })
 
   
-  ###############################################
+  #######################################################################################
+  #######################################################################################
  
   
   #generate user-inputed graphs for analyzing
@@ -143,7 +183,8 @@ function(input, output) {
   
   
   
-  ###########################################
+  #######################################################################################
+  #######################################################################################
   
   #generate datatables for raw data output
   output$flights = DT::renderDataTable({
