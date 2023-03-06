@@ -7,7 +7,8 @@ library(DT)
 library(plotly)
 library(lubridate)
 #create a navigation bar with seperate tabs
-navbarPage("NYC Flights", id="nav", 
+fluidPage(
+  navbarPage("NYC Flights", id="nav", 
            
            #create the first panel: the Map
            tabPanel("Map",
@@ -23,12 +24,14 @@ navbarPage("NYC Flights", id="nav",
             sidebarLayout(
               #create sidebar for inputs
               sidebarPanel(
+                #checkbox for airports to analyze
                 checkboxGroupInput(inputId = "airportChoice", label = h3("Which airport(s) would you like to analyze"), 
                                    choices = c("JFK", "EWR", "LGA"),
                                    selected = c("JFK", "EWR" , "LGA")
                                    ),
-
-                dateRangeInput(inputId= "daterange", "During which time perio:",
+                
+                #range for tiem period
+                dateRangeInput(inputId= "daterange", "During which time period:",
                                start = "2013-01-01",
                                end   = "2013-12-31")
                 ),
@@ -36,7 +39,7 @@ navbarPage("NYC Flights", id="nav",
               #create mainpanel for outputs, e.g. graphs
               mainPanel(tabsetPanel(
                 tabPanel('Number of passengers', plotlyOutput('passenger_numbers')),
-                tabPanel('Destinations'),
+                tabPanel('Destinations', DT::dataTableOutput("targetloc_all"), DT::dataTableOutput("targetloc_filt")),
                 
               )
               )
@@ -45,6 +48,7 @@ navbarPage("NYC Flights", id="nav",
           
           
           #create third tab: raw data explorer
+          
           tabPanel("Raw Data explorer",
             tabsetPanel(
               tabPanel("Flights", DT::dataTableOutput("flights")),
@@ -59,4 +63,6 @@ navbarPage("NYC Flights", id="nav",
                    includeMarkdown("readme.Rmd"))
             
            
+)
+
 )

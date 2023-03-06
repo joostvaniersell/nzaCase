@@ -17,3 +17,4 @@ https://github.com/atmajitg/bloodbanks
 
 Other stuff:
 https://shiny.rstudio.com/articles/datatables.html
+https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf
