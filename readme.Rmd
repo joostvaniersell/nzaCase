@@ -9,20 +9,20 @@ output: html_document
 Main inspiration: 
 
 Superzip example:
+
 https://github.com/rstudio/shiny-examples/tree/main/063-superzip-example
 
 Bloodbank :
+
 https://shiny.rstudio.com/gallery/india-blood-banks.html
+
 https://github.com/atmajitg/bloodbanks
 
+
 Other stuff:
+
 https://shiny.rstudio.com/articles/datatables.html
+
 https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf
 
 
-TODO:
-- Delay
-- Info in popups
-- keep colors consistent in data tab
-- lines to popular destinations
-- Add delay per city
